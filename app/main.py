@@ -5,7 +5,7 @@ def cache(func: Callable) -> Callable:
     cache_stores = {}
 
     def wrapper(*args, **kwargs) -> Callable:
-        key = create_key(args, kwargs)
+        key = make_key(args, kwargs)
 
         if key not in cache_stores:
             result = func(*args, **kwargs)
@@ -20,5 +20,5 @@ def cache(func: Callable) -> Callable:
     return wrapper
 
 
-def create_key(args: tuple, kwargs: dict) -> tuple:
+def make_key(args: tuple, kwargs: dict) -> tuple:
     return args, tuple(sorted(kwargs.items()))
