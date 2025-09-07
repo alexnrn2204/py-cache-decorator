@@ -2,26 +2,23 @@ from typing import Callable
 
 
 def cache(func: Callable) -> Callable:
-    cache_stores = []
+    cache_stores = {}
 
     def wrapper(*args, **kwargs) -> Callable:
-        cache_find = [
-            cache_store
-            for cache_store in cache_stores
-            if cache_store["args"] == args and cache_store["kwargs"] == kwargs
-        ]
-        if len(cache_find) == 0:
+        key = create_key(args, kwargs)
+
+        if key not in cache_stores:
             result = func(*args, **kwargs)
-            cache_stores.append({
-                "args": args,
-                "kwargs": kwargs,
-                "result": result
-            })
             print("Calculating new result")
+            cache_stores[key] = result
         else:
-            result = cache_find[0]["result"]
             print("Getting from cache")
+            result = cache_stores[key]
 
         return result
 
     return wrapper
+
+
+def create_key(args: tuple, kwargs: dict) -> tuple:
+    return args, tuple(sorted(kwargs.items()))
