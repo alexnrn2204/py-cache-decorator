@@ -4,7 +4,7 @@ from typing import Callable
 def cache(func: Callable) -> Callable:
     cache_stores = {}
 
-    def wrapper(*args, **kwargs):
+    def wrapper(*args, **kwargs) -> Callable:
         key = make_key(args, kwargs)
 
         if key not in cache_stores:
